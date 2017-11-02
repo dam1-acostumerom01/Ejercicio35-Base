@@ -46,21 +46,21 @@ public class ControlJuego {
 			columna = rd.nextInt(LADO_TABLERO);
 			if (tablero[fila][columna] == 0) {
 				tablero[fila][columna] = -1;
-				
+
 			} else {
 				fila = rd.nextInt(LADO_TABLERO);
 				columna = rd.nextInt(LADO_TABLERO);
 				i--;
 			}
-		
+
 		}
 		for (int j = 0; j < tablero.length; j++) {
 			for (int j2 = 0; j2 < tablero.length; j2++) {
-				if (tablero[j][j2]==-1) {
-					
+				if (tablero[j][j2] == -1) {
+
 					calculoMinasAdjuntas(j, j2);
-					System.out.println(j+"--"+j2);
-				} 
+
+				}
 			}
 		}
 		depurarTablero();
@@ -82,16 +82,16 @@ public class ControlJuego {
 	private int calculoMinasAdjuntas(int i, int j) {
 		int maximo = LADO_TABLERO - 1;
 		int minimo = 0;
-		int minas=0;
-		
-		for (int k=Math.max(minimo,i-1);k<=Math.min(maximo,i+1);k++) {
-			for (int l=Math.max(minimo,j-1);l<=Math.min(maximo, j+1);l++) {
-				System.out.println("Estoy en la posic�n"+k+"--"+l);
-					if (tablero[k][l]!=-1) {
-						tablero[k][l]++;
-					}else {
-						minas++;
-					}
+		int minas = 0;
+
+		for (int k = Math.max(minimo, i - 1); k <= Math.min(maximo, i + 1); k++) {
+			for (int l = Math.max(minimo, j - 1); l <= Math.min(maximo, j + 1); l++) {
+
+				if (tablero[k][l] != -1) {
+					tablero[k][l]++;
+				} else {
+					minas++;
+				}
 			}
 		}
 		return minas;
@@ -109,7 +109,11 @@ public class ControlJuego {
 	 * @return : Verdadero si no ha explotado una mina. Falso en caso contrario.
 	 */
 	public boolean abrirCasilla(int i, int j) {
-
+		if (tablero[i][j] != -1) {
+			puntuacion++;
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -120,6 +124,11 @@ public class ControlJuego {
 	 *         minas.
 	 **/
 	public boolean esFinJuego() {
+		if (puntuacion==(LADO_TABLERO*LADO_TABLERO)-MINAS_INICIALES) {
+			return true;
+		}else {
+			return false;
+		}
 	}
 
 	/**
@@ -149,6 +158,18 @@ public class ControlJuego {
 	 * @return Un entero que representa el número de minas alrededor de la celda
 	 */
 	public int getMinasAlrededor(int i, int j) {
+		int maximo = LADO_TABLERO - 1;
+		int minimo = 0;
+		int minas = 0;
+
+		for (int k = Math.max(minimo, i - 1); k <= Math.min(maximo, i + 1); k++) {
+			for (int l = Math.max(minimo, j - 1); l <= Math.min(maximo, j + 1); l++) {
+				if (tablero[k][l] == -1) {
+					minas++;
+				}
+			}
+		}
+		return minas;
 	}
 
 	/**
@@ -157,6 +178,7 @@ public class ControlJuego {
 	 * @return Un entero con la puntuación actual
 	 */
 	public int getPuntuacion() {
+		return puntuacion;
 	}
 
 }
