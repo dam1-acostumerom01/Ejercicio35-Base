@@ -40,6 +40,7 @@ public class ControlJuego {
 		Random rd = new Random();
 		int fila;
 		int columna;
+		puntuacion=0;
 
 		for (int i = 0; i < MINAS_INICIALES; i++) {
 			fila = rd.nextInt(LADO_TABLERO);

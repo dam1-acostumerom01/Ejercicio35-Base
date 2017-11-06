@@ -1,10 +1,26 @@
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.HeadlessException;
+import java.awt.Image;
+import java.awt.Rectangle;
+import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
+import java.io.File;
+import java.io.IOException;
+import java.text.AttributedCharacterIterator;
+
+import javax.imageio.ImageIO;
+import javax.naming.PartialResultException;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -22,6 +38,7 @@ public class VentanaPrincipal {
 	JPanel panelPuntuacion;
 	JPanel panelJuego;
 	VentanaPrincipal ventanaprincipal = this;
+	BufferedImage imagen;
 
 	// Todos los botones se meten en un panel independiente.
 	// Hacemos esto para que podamos cambiar después los componentes por otros
@@ -60,7 +77,7 @@ public class VentanaPrincipal {
 		panelPuntuacion.setLayout(new GridLayout(1, 1));
 		panelJuego = new JPanel();
 		panelJuego.setLayout(new GridLayout(10, 10));
-
+		panelImagen.setLayout(new GridLayout(1, 1));
 		botonEmpezar = new JButton("Go!");
 		pantallaPuntuacion = new JTextField("0");
 		pantallaPuntuacion.setEditable(false);
@@ -130,6 +147,20 @@ public class VentanaPrincipal {
 		panelEmpezar.add(botonEmpezar);
 		panelPuntuacion.add(pantallaPuntuacion);
 
+		// Imagen del panel de la izquierda
+		try {
+			imagen = ImageIO.read(new File("imagen.png"));
+			ImageIcon icono = new ImageIcon(imagen.getScaledInstance(imagen.getWidth()/5,imagen.getHeight()/5, Image.SCALE_FAST));
+			
+			JLabel img = new JLabel(icono);
+		
+			panelImagen.add(img);
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 	/**
@@ -139,11 +170,26 @@ public class VentanaPrincipal {
 	public void inicializarListeners() {
 		for (int i = 0; i < botonesJuego.length; i++) {
 			for (int j = 0; j < botonesJuego.length; j++) {
-				botonesJuego[i][j].addActionListener(new ActionBoton(this,i,j) {
-					
+				botonesJuego[i][j].addActionListener(new ActionBoton(this, i, j) {
+
 				});
 			}
 		}
+		botonEmpezar.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				ventana.remove(panelImagen);
+				ventana.remove(panelJuego);
+				ventana.remove(panelPuntuacion);
+				ventana.remove(panelEmpezar);
+
+				refrescarPantalla();
+				juego = new ControlJuego();
+				inicializar();
+				refrescarPantalla();
+			}
+		});
 	}
 
 	/**
@@ -166,9 +212,9 @@ public class VentanaPrincipal {
 		etiquetaCasilla.setForeground(correspondenciaColores[juego.getMinasAlrededor(i, j)]);
 		actualizarPuntuacion();
 		panelesJuego[i][j].setLayout(new GridBagLayout());
-		panelesJuego[i][j].add(etiquetaCasilla,null);
+		panelesJuego[i][j].add(etiquetaCasilla, null);
 		refrescarPantalla();
-		
+
 	}
 
 	/**
@@ -181,14 +227,24 @@ public class VentanaPrincipal {
 	 *       juego.
 	 */
 	public void mostrarFinJuego(boolean porExplosion) {
-		// TODO
+		if (porExplosion) {
+			new JOptionPane().showMessageDialog(null, "Oh no!\nHas pisado una bomba!", "FIN DEL JUEGO", 1);
+
+		} else {
+			new JOptionPane().showMessageDialog(null, "Enhorabuena!\nHas ganado!", "FIN DEL JUEGO", 1);
+		}
+		for (int i = 0; i < botonesJuego.length; i++) {
+			for (int j = 0; j < botonesJuego.length; j++) {
+				botonesJuego[i][j].setEnabled(false);
+			}
+		}
 	}
 
 	/**
 	 * Método que muestra la puntuación por pantalla.
 	 */
 	public void actualizarPuntuacion() {
-		pantallaPuntuacion.setText(""+juego.getPuntuacion());
+		pantallaPuntuacion.setText("" + juego.getPuntuacion());
 	}
 
 	/**

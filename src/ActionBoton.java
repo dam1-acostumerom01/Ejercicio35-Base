@@ -2,6 +2,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
 /**
  * Clase que implementa el listener de los botones del Buscaminas. De alguna
@@ -40,6 +41,7 @@ public class ActionBoton implements ActionListener {
 			
 			if (ventana.getJuego().esFinJuego()) {
 				ventana.mostrarFinJuego(false);
+				
 			}
 			}else {
 				ventana.mostrarFinJuego(true);
