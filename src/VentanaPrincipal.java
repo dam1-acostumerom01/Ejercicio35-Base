@@ -149,10 +149,14 @@ public class VentanaPrincipal {
 
 		// Imagen del panel de la izquierda
 		try {
+			panelImagen.setLayout(new GridLayout(1, 1));
+			JLabel img = new JLabel();
+			img.setBorder(BorderFactory.createLineBorder(Color.GREEN));
 			imagen = ImageIO.read(new File("imagen.png"));
-			ImageIcon icono = new ImageIcon(imagen.getScaledInstance(imagen.getWidth()/5,imagen.getHeight()/5, Image.SCALE_FAST));
+			//Este evento no funciona. Hay que buscar un listener que se active cuando se reescala el componente.
+			ImageIcon icono = new ImageIcon(imagen.getScaledInstance(img.getWidth(), img.getHeight(), Image.SCALE_SMOOTH));
 			
-			JLabel img = new JLabel(icono);
+			 img.setIcon(icono);
 		
 			panelImagen.add(img);
 
