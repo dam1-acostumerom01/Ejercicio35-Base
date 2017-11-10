@@ -11,6 +11,10 @@ import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.ContainerEvent;
+import java.awt.event.ContainerListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
@@ -20,6 +24,7 @@ import java.text.AttributedCharacterIterator;
 import javax.imageio.ImageIO;
 import javax.naming.PartialResultException;
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -28,6 +33,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 
 public class VentanaPrincipal {
 
@@ -39,6 +46,7 @@ public class VentanaPrincipal {
 	JPanel panelJuego;
 	VentanaPrincipal ventanaprincipal = this;
 	BufferedImage imagen;
+	JLabel img = new JLabel();
 
 	// Todos los botones se meten en un panel independiente.
 	// Hacemos esto para que podamos cambiar después los componentes por otros
@@ -94,24 +102,28 @@ public class VentanaPrincipal {
 		GridBagConstraints settings = new GridBagConstraints();
 		settings.gridx = 0;
 		settings.gridy = 0;
-		settings.weightx = 1;
+		//settings.weightx = 1;
+		settings.ipadx=80;
 		settings.weighty = 1;
 		settings.fill = GridBagConstraints.BOTH;
+		
 		ventana.add(panelImagen, settings);
 		// VERDE
 		settings = new GridBagConstraints();
 		settings.gridx = 1;
 		settings.gridy = 0;
-		settings.weightx = 1;
+		//settings.weightx = 1;
 		settings.weighty = 1;
+		settings.ipadx=80;
 		settings.fill = GridBagConstraints.BOTH;
 		ventana.add(panelEmpezar, settings);
 		// AMARILLO
 		settings = new GridBagConstraints();
 		settings.gridx = 2;
 		settings.gridy = 0;
-		settings.weightx = 1;
+		//settings.weightx = 1;
 		settings.weighty = 1;
+		settings.ipadx=80;
 		settings.fill = GridBagConstraints.BOTH;
 		ventana.add(panelPuntuacion, settings);
 		// ROJO
@@ -147,24 +159,26 @@ public class VentanaPrincipal {
 		panelEmpezar.add(botonEmpezar);
 		panelPuntuacion.add(pantallaPuntuacion);
 
+		//panel imagen
+		panelImagen.setLayout(new GridLayout(1, 1));
+		panelImagen.add(img);
+		img.setBorder(BorderFactory.createLineBorder(Color.GREEN));
+	}
+	
+	public void colocarImagen() {
 		// Imagen del panel de la izquierda
-		try {
-			panelImagen.setLayout(new GridLayout(1, 1));
-			JLabel img = new JLabel();
-			img.setBorder(BorderFactory.createLineBorder(Color.GREEN));
-			imagen = ImageIO.read(new File("imagen.png"));
-			//Este evento no funciona. Hay que buscar un listener que se active cuando se reescala el componente.
-			ImageIcon icono = new ImageIcon(imagen.getScaledInstance(img.getWidth(), img.getHeight(), Image.SCALE_SMOOTH));
-			
-			 img.setIcon(icono);
-		
-			panelImagen.add(img);
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+				try {
+					
+					imagen = ImageIO.read(new File("imagen.png"));
+					//Este evento no funciona. Hay que buscar un listener que se active cuando se reescala el componente.
+					ImageIcon icono = new ImageIcon(imagen.getScaledInstance(img.getWidth(),img.getHeight(), Image.SCALE_SMOOTH));
+					 img.setIcon(icono);
+					 refrescarPantalla();
+				
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 	}
 
 	/**
@@ -194,6 +208,37 @@ public class VentanaPrincipal {
 				refrescarPantalla();
 			}
 		});
+		
+		ventana.addComponentListener(new ComponentListener() {
+			
+			@Override
+			public void componentShown(ComponentEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void componentResized(ComponentEvent arg0) {
+				
+					colocarImagen();
+				
+				
+				
+			}
+			
+			@Override
+			public void componentMoved(ComponentEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void componentHidden(ComponentEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
 	}
 
 	/**
@@ -277,6 +322,8 @@ public class VentanaPrincipal {
 		ventana.setVisible(true);
 		inicializarComponentes();
 		inicializarListeners();
+	
+		
 	}
 
 }
