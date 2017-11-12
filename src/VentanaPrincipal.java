@@ -102,28 +102,31 @@ public class VentanaPrincipal {
 		GridBagConstraints settings = new GridBagConstraints();
 		settings.gridx = 0;
 		settings.gridy = 0;
-		//settings.weightx = 1;
-		settings.ipadx=80;
+		// settings.weightx = 1;
+		settings.ipadx = 100;
 		settings.weighty = 1;
+		settings.anchor = GridBagConstraints.WEST;
 		settings.fill = GridBagConstraints.BOTH;
-		
+
 		ventana.add(panelImagen, settings);
 		// VERDE
 		settings = new GridBagConstraints();
 		settings.gridx = 1;
 		settings.gridy = 0;
-		//settings.weightx = 1;
+		// settings.weightx = 1;
 		settings.weighty = 1;
-		settings.ipadx=80;
+		settings.ipadx = 100;
+		settings.anchor = GridBagConstraints.WEST;
 		settings.fill = GridBagConstraints.BOTH;
 		ventana.add(panelEmpezar, settings);
 		// AMARILLO
 		settings = new GridBagConstraints();
 		settings.gridx = 2;
 		settings.gridy = 0;
-		//settings.weightx = 1;
+		// settings.weightx = 1;
 		settings.weighty = 1;
-		settings.ipadx=80;
+		settings.ipadx = 100;
+		settings.anchor = GridBagConstraints.WEST;
 		settings.fill = GridBagConstraints.BOTH;
 		ventana.add(panelPuntuacion, settings);
 		// ROJO
@@ -159,26 +162,27 @@ public class VentanaPrincipal {
 		panelEmpezar.add(botonEmpezar);
 		panelPuntuacion.add(pantallaPuntuacion);
 
-		//panel imagen
+		// panel imagen
 		panelImagen.setLayout(new GridLayout(1, 1));
 		panelImagen.add(img);
-		img.setBorder(BorderFactory.createLineBorder(Color.GREEN));
+		colocarImagen();
 	}
-	
+
 	public void colocarImagen() {
 		// Imagen del panel de la izquierda
-				try {
-					
-					imagen = ImageIO.read(new File("imagen.png"));
-					//Este evento no funciona. Hay que buscar un listener que se active cuando se reescala el componente.
-					ImageIcon icono = new ImageIcon(imagen.getScaledInstance(img.getWidth(),img.getHeight(), Image.SCALE_SMOOTH));
-					 img.setIcon(icono);
-					 refrescarPantalla();
-				
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+		try {
+
+			imagen = ImageIO.read(new File("imagen.png"));
+			// Este evento no funciona. Hay que buscar un listener que se active cuando se
+			// reescala el componente.
+			ImageIcon icono = new ImageIcon(imagen.getScaledInstance(150, 50, Image.SCALE_SMOOTH));
+			img.setIcon(icono);
+			refrescarPantalla();
+			img.setHorizontalAlignment(SwingConstants.CENTER);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -208,37 +212,36 @@ public class VentanaPrincipal {
 				refrescarPantalla();
 			}
 		});
-		
-		ventana.addComponentListener(new ComponentListener() {
-			
-			@Override
-			public void componentShown(ComponentEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void componentResized(ComponentEvent arg0) {
-				
-					colocarImagen();
-				
-				
-				
-			}
-			
-			@Override
-			public void componentMoved(ComponentEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void componentHidden(ComponentEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
-		
+
+		// dejo comentado este listener para poder implementarlo más adelante.
+
+		/*
+		 * ventana.addComponentListener(new ComponentListener() {
+		 * 
+		 * @Override public void componentShown(ComponentEvent arg0) { // TODO
+		 * Auto-generated method stub
+		 * 
+		 * }
+		 * 
+		 * @Override public void componentResized(ComponentEvent arg0) {
+		 * 
+		 * colocarImagen();
+		 * 
+		 * 
+		 * 
+		 * }
+		 * 
+		 * @Override public void componentMoved(ComponentEvent arg0) { // TODO
+		 * Auto-generated method stub
+		 * 
+		 * }
+		 * 
+		 * @Override public void componentHidden(ComponentEvent arg0) { // TODO
+		 * Auto-generated method stub
+		 * 
+		 * } });
+		 */
+
 	}
 
 	/**
@@ -322,8 +325,7 @@ public class VentanaPrincipal {
 		ventana.setVisible(true);
 		inicializarComponentes();
 		inicializarListeners();
-	
-		
+
 	}
 
 }
